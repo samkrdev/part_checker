@@ -28,21 +28,29 @@ class FileDownloader(object):
 
 
 st.title("Part Filter")
-st.markdown("### Master String ")
-txt = st.text_area("Enter the master text here")
-st.write(txt)
-checkstring = set(map("".join, zip(*[iter(txt)] * 5)))
+col1, col2 = st.columns(2)
+with col1:
+    st.markdown("### Master String ")
+    txt = st.text_area("Enter the master text here")
+    st.write(txt)
+    checkstring = set(map("".join, zip(*[iter(txt)] * 5)))
+with col2:
+    st.markdown("### File upload")
+    uploaded_file = st.file_uploader("Choose an xlsx file")
 
-st.markdown("### File upload")
-uploaded_file = st.file_uploader("Choose an xlsx file")
+
 if len(txt) > 0 and uploaded_file is not None:
     data = pd.read_excel(uploaded_file)
     # part_dict = data.set_index("Part No").T.to_dict("list")
-    part = st.selectbox("Select parts column", (data.columns))
-    st.write("parts:", part)
-    config_options = st.multiselect(
-        "Select Config Columns", options=data.columns, default=None
-    )
+
+    col3, col4 = st.columns(2)
+    with col3:
+        part = st.selectbox("Select parts column", (data.columns))
+        st.write("parts:", part)
+    with col4:
+        config_options = st.multiselect(
+            "Select Config Columns", options=data.columns, default=None
+        )
     if len(config_options) > 0:
         data_new = data[[part] + config_options].copy()
         st.table(data_new.head(2))

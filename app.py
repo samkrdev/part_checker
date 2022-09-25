@@ -5,6 +5,7 @@ import pandas as pd
 import base64
 import time
 
+st.set_page_config(layout="wide")
 timestr = time.strftime("%Y%m%d-%H%M%S")
 
 
@@ -66,6 +67,8 @@ if len(txt) > 0 and uploaded_file is not None:
             if all([part in checkstring for part in v]):
                 results_list.append(k)
                 st.write(k)
+        if len(results_list) > 0:
+            st.balloons()
         df["parts"] = results_list
         FileDownloader(df.to_csv(), file_ext="csv").download()
 
